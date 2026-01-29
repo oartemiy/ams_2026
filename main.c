@@ -2,6 +2,7 @@
 
 int main() 
 {
-    int a = 1 << 32 - 1;
-    printf("%u\n", a);
+    int a = 5;
+    int b = 2;
+    int c = a / b;
 }

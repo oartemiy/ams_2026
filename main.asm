@@ -1,35 +1,61 @@
 %include "io.inc"
 
+extern io_get_dec, io_print_dec, io_print_udec
+
+section .bss
+a resq 1
+b resq 1
+
 section .text
 global main
 main:
-    push ebp
-    mov ebp, esp
-    sub esp, 12
 
-    GET_DEC 4, [ebp - 4] ; a
-    GET_DEC 4, [ebp - 8] ; b
+    ; mov ax, 0x11E4
+    ; cbw ; ox11E4 -> oxFFE4
 
-    sub [ebp - 4], dword 1
+    ; mov al, 0xFF ; (-1 signed, 255 unsigned)
+    ; mov bl, 0x01 ; (1 signed, 1 unsigned)
+    ; add al, bl ; al = 0x00
+    ; ; signed - good, unsdigned - bad
+    ; ; OF = 0, CF = 1, ZF = 1
 
-    mov eax, [ebp - 4]
+    ; adc al, bl ; al = al + bl + CF
+    ; sbb al, bl ; al = al - bl - CF
 
-    imul eax, dword 41
 
-    mov [ebp - 12], eax
+    ; sub al, bl
 
-    mov edx, 0
-    mov eax, [ebp - 4]
-    mov ebx, 2
+    ; Long arithmetics
+    ; long a, long b, a + b on asm
 
-    div ebx
+    ; call io_get_dec
+    ; mov dword [a], eax
+    ; call io_get_dec
+    ; mov dword [a + 4], eax
 
-    add eax, [ebp - 12]
-    add eax, [ebp - 8]
+    ; call io_get_dec
+    ; mov dword [b], eax
+    ; call io_get_dec
+    ; mov dword [b + 4], eax
 
-    PRINT_DEC 4, eax
-    NEWLINE
+ 
+    ; add eax, dword [a + 4]
+
+    ; mov ebx, dword [a]
+    ; adc ebx, dword [b]
+
+    ; mov dword [a], ebx
+    ; mov dword [a + 4], eax
+
+    ; mov eax, dword [a]
+    ; call io_print_udec
+
+
+    ; mov eax, dword [a + 4]
+    ; call io_print_udec
+
+    
+    
 
     xor eax, eax
-    leave
     ret
