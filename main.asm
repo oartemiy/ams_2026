@@ -10,7 +10,7 @@ main:
     mov eax, [a]
     
     mov ebx, eax
-    sar ebx, 31 ; signed shift, shl - unsigned shift
+    sar ebx, 31 ; signed shift right, shr - unsigned shift right
     ; sar: 10000...1 -> 11111....1000
 
     xor eax, ebx
