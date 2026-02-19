@@ -1,108 +1,139 @@
 %include "io.inc"
 
-section .bss
-a11 resd 1
-a12 resd 1
-a21 resd 1
-a22 resd 1
-b1 resd 1
-b2 resd 1
-x resd 1
-y resd 1
-m00 resd 1
-m01 resd 1
-m10 resd 1
-m11 resd 1
-s00 resd 1
-s01 resd 1
-s10 resd 1
-s11 resd 1
-
 section .text
 global main
 main:
-    GET_UDEC 4, [a11]
-    GET_UDEC 4, [a12]
-    GET_UDEC 4, [a21]
-    GET_UDEC 4, [a22]
-    GET_UDEC 4, [b1]
-    GET_UDEC 4, [b2]
+    ; if, cycles and so on
+    ; if (a>b) x = 1
+    ; 1
+;     mov eax, [a]
+;     mov ebx, [b]
+;     cmp eax, ebx
+;     jng end_if ; not grater, we made otricanie
 
-    mov eax, dword [b1]
-    not eax
-    mov ebx, dword [b2]
-    not ebx
-    and eax, ebx
-    mov dword [m00], eax
+;     mov [x], 1
+; end_if:
+    
 
-    mov eax, dword [a12]
-    xor eax, dword [b1]
-    not eax
-    mov ebx, dword [a22]
-    xor ebx, dword [b2]
-    not ebx
-    and eax, ebx
-    mov dword [m01], eax
+    ; 2
+;     mov eax, [a]
+;     mov ebx, [b]
+;     cmp eax, ebx
+;     jnl else
+;     mov [x], 1
+;     jmp end_if
+; else:
+;     mov[x], 2
 
-    mov eax, dword [a11]
-    xor eax, dword [b1]
-    not eax
-    mov ebx, dword [a21]
-    xor ebx, dword [b2]
-    not ebx
-    and eax, ebx
-    mov dword [m10], eax
+; end_if:
 
-    mov eax, dword [a11]
-    xor eax, dword [a12]
-    xor eax, dword [b1]
-    not eax
-    mov ebx, dword [a21]
-    xor ebx, dword [a22]
-    xor ebx, dword [b2]
-    not ebx
-    and eax, ebx
-    mov dword [m11], eax
+;     ; while (ecx > 0) --ecx
+; while_begin:
+;     cmp ecx, 0
+;     jng while_end
+;     dec ecx
+;     jmp while_begin
 
-    mov eax, dword [m00]
-    mov dword [s00], eax
+; while_end:
 
-    mov eax, dword [m00]
-    not eax
-    and eax, dword [m01]
-    mov dword [s01], eax
+    ; for statement
+;     mov ecx, 0
+; for_begin:
+;     cmp ecx, 10
+;     jnl for_end
 
-    mov eax, dword [m00]
-    not eax
-    mov ebx, dword [m01]
-    not ebx
-    and eax, ebx
-    and eax, dword [m10]
-    mov dword [s10], eax
+;     inc ecx
+;     jmp for_begin
 
-    mov eax, dword [m00]
-    not eax
-    mov ebx, dword [m01]
-    not ebx
-    and eax, ebx
-    mov ebx, dword [m10]
-    not ebx
-    and eax, ebx
-    and eax, dword [m11]
-    mov dword [s11], eax
+; for_end:
 
-    mov eax, dword [s10]
-    or eax, dword [s11]
-    mov dword [x], eax
 
-    mov eax, dword [s01]
-    or eax, dword [s11]
-    mov dword [y], eax
+    ; loop
+;     mov ecx, 10
+; label:
+;     loop label ; ecx--, if not ecx == 0 then jmp label
 
-    PRINT_UDEC 4, [x]
-    PRINT_CHAR ' '
-    PRINT_UDEC 4, [y]
-    NEWLINE
+    ; two fors
+
+    ;     mov ecx, 0
+; outher_for_begin:
+;     cmp ecx, 10
+;     jnl outher_for_end
+;     push ecx
+;         inter_for_begin:
+;             cmp ecx, 10
+;             jnl inter_for_end
+
+;             inc ecx
+;             jmp inter_for_begin
+
+;         inter_for_end:
+;         pop ecx
+
+;             inc ecx
+;             jmp outher_for_begin
+
+; outher_for_end:
+
+;     mov eax, [x]
+;     mov ebx, [y]
+;     mov ecx, [z]
+;     cmp eax, ebx
+;     jg true_part
+;     cmp ecx, 0
+;     jnz end_if
+; true_part:
+;     add eax, ebx
+;     mov [x], ebx
+
+; end_if:
+
+    ; mov eax, [x]
+    ; mov ebx, [y]
+    ; mov ecx, [z]
+    ; cmp eax, ebx
+    ; cmp eax, ebx
+    ; jnle else_part
+    ; inc ecx
+    ; jz else_part
+
+    ; ; true_part:
+    ; mul ecx
+    ; mov [b], eax
+    ; jmp end_if
+    ; else_part:
+    ; mov [c], 0
+
+    ; switch
+    mov eax, [x]
+
+    cmp eax, 2
+    jg default_case
+    jmp [jump_table + eax * 4]
+    
+; before runtime
+jump_table:
+    dd case0
+    dd case1
+    dd case2
+
+    case0:
+        call func0
+        jmp end_switch
+
+    case1:
+        call func1
+        jmp end_switch
+
+
+    case2:
+        call func2
+        jmp end_switch
+
+    default_case:
+        call func_default
+    
+    end_switch:
 
     xor eax, eax
     ret
