@@ -1,8 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <sys/types.h>
 
+static int arr[10];
+        
 int main(void)
 {
-    printf("%u\n", 112 ^ 0);
+    for (int i = 0; i != 10; ++i)
+    {
+        arr[i] = i + 1;
+    }
 }
