@@ -2,12 +2,24 @@
 // #include <stdlib.h>
 // #include <sys/types.h>
 
-static int arr[10];
-        
-int main(void)
+#include <stdio.h>
+
+
+void reverse()
 {
-    for (int i = 0; i != 10; ++i)
+    int a;
+    scanf("%d", &a);
+    if (a == 0) return;
+    if (a % 2 == 1)
     {
-        arr[i] = i + 1;
+        printf("%d ", a);
+        reverse();
+    }
+    else
+    {
+        reverse();
+        printf("%d ", a);
     }
 }
+
+int main(void) { reverse(); }
