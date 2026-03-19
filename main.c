@@ -3,23 +3,21 @@
 // #include <sys/types.h>
 
 #include <stdio.h>
+#include <stdlib.h>
 
-
-void reverse()
+uint rotate(uint num)
 {
-    int a;
-    scanf("%d", &a);
-    if (a == 0) return;
-    if (a % 2 == 1)
+    uint a = 0;
+    while (num)
     {
-        printf("%d ", a);
-        reverse();
+        a = a * 10 + num % 10;
+        num /= 10;
     }
-    else
-    {
-        reverse();
-        printf("%d ", a);
-    }
+    return a;
 }
 
-int main(void) { reverse(); }
+
+int main(void)
+{
+
+}
