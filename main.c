@@ -19,5 +19,7 @@ uint rotate(uint num)
 
 int main(void)
 {
-
+    int a;
+    int b;
+    printf("%p\n%p\n", &a, &b);
 }

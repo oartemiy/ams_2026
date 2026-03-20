@@ -1,68 +1,54 @@
 %include "io.inc"
 
-
-; uint reverse(uint n)
-reverse:
+div3:
     push ebp
     mov ebp, esp
-
-    mov eax, dword [ebp + 8] ; n
-    mov ecx, dword 0 ; ans
-    push ebx
-    mov ebx, dword 10
-
-reverse_begin:
-    mov edx, dword 0
-    div ebx
-    imul ecx, ebx
-    add ecx, edx
+    mov eax, dword [ebp + 8] ;n
     cmp eax, dword 0
-    jne reverse_begin
-
-reverse_end:
-    mov eax, ecx
-    pop ebx
+    je yes
+while_begin: ; x == x / 4 + x % 4 (mod 3)
+    cmp eax, dword 3
+    jbe while_end
+    mov edx, eax
+    and eax, dword 3
+    shr edx, 2
+    add eax, edx
+    jmp while_begin
+while_end:
+    cmp eax, dword 0
+    je yes
+    cmp eax, dword 3
+    je yes
+    jmp no
+yes:
+    PRINT_STRING `YES`
+    NEWLINE
+    jmp end 
+no:
+    PRINT_STRING `NO`
+    NEWLINE
+end:
     mov esp, ebp
     pop ebp
     ret
 
-
 section .bss
-    M resd 1
-    N resd 1
+N resd 1
 
 section .text
 global main
 main:
-    GET_UDEC 4, [M]
     GET_UDEC 4, [N]
-    mov edi, dword [M]
-    mov esi, dword [N]
+    mov ecx, dword [N]
 for_begin:
-    cmp esi, dword 0
-    jz for_end
-    push edi
-    call reverse
-    add edi, eax
-    add esp, dword 4
-    dec esi
+    cmp ecx, dword 0
+    je for_end
+    GET_UDEC 4, eax
+    push eax
+    call div3
+    pop eax
+    dec ecx
     jmp for_begin
-
 for_end:
-    push edi
-    call reverse
-    add esp, dword 4
-    cmp edi, eax
-    jz palindrome
-    PRINT_STRING `No`
-    NEWLINE
-    jmp end
-
-palindrome:
-    PRINT_STRING `Yes`
-    NEWLINE
-    PRINT_UDEC 4, edi
-    NEWLINE
-end:
     xor eax, eax
     ret
